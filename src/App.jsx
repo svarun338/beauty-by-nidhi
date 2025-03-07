@@ -1,26 +1,30 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import Services from "./components/Services";
-import Gallery from "./components/Gallery";
+import { Suspense, lazy } from "react";
+import Loader from "./components/Loader"; // Import the custom loader
 
-import Contact from "./components/Contact";
-import Profile from "./components/Profile";  // ✅ Import Profile
-import Footer from "./components/Footer";
+// Lazy-loaded components
+const Header = lazy(() => import("./components/Header"));
+const Hero = lazy(() => import("./components/Hero"));
+const Services = lazy(() => import("./components/Services"));
+const Gallery = lazy(() => import("./components/Gallery"));
+const Contact = lazy(() => import("./components/Contact"));
+const Profile = lazy(() => import("./components/Profile"));
+const Footer = lazy(() => import("./components/Footer"));
 
 function App() {
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Hero />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/gallery" element={<Gallery />} />
-       
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />  {/* ✅ Add Profile Route */}
-      </Routes>
-      <Footer />
+      <Suspense fallback={<Loader />}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Hero />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+        <Footer />
+      </Suspense>
     </Router>
   );
 }
